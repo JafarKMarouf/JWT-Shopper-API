@@ -73,7 +73,7 @@ public class ProductService implements IProductService {
 
     /**
      * @param existingProduct Product
-     * @param request         UpdateProductRequest
+     * @param request UpdateProductRequest
      * @return Product
      */
     private Product updateExistingProduct(Product existingProduct, UpdateProductRequest request) {
