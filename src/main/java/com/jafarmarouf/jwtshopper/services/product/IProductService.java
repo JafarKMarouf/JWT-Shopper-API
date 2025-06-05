@@ -1,5 +1,6 @@
 package com.jafarmarouf.jwtshopper.services.product;
 
+import com.jafarmarouf.jwtshopper.Dtos.ProductDto;
 import com.jafarmarouf.jwtshopper.models.Product;
 import com.jafarmarouf.jwtshopper.requests.product.AddProductRequest;
 import com.jafarmarouf.jwtshopper.requests.product.UpdateProductRequest;
@@ -30,4 +31,7 @@ public interface IProductService {
 
     Long countProductByNameAndBrand(String brand, String name);
 
+    ProductDto convertToProductDto(Product product);
+
+    List<ProductDto> convertToProductDtoList(List<Product> products);
 }

@@ -1,14 +1,18 @@
 package com.jafarmarouf.jwtshopper.services.product;
 
+import com.jafarmarouf.jwtshopper.Dtos.ImageDto;
+import com.jafarmarouf.jwtshopper.Dtos.ProductDto;
 import com.jafarmarouf.jwtshopper.exceptions.ResourceNotFoundException;
 import com.jafarmarouf.jwtshopper.models.Category;
+import com.jafarmarouf.jwtshopper.models.Image;
 import com.jafarmarouf.jwtshopper.models.Product;
 import com.jafarmarouf.jwtshopper.repository.CategoryRepository;
+import com.jafarmarouf.jwtshopper.repository.ImageRepository;
 import com.jafarmarouf.jwtshopper.repository.ProductRepository;
 import com.jafarmarouf.jwtshopper.requests.product.AddProductRequest;
 import com.jafarmarouf.jwtshopper.requests.product.UpdateProductRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +23,8 @@ import java.util.Optional;
 public class ProductService implements IProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final ModelMapper modelMapper;
+    private final ImageRepository imageRepository;
 
     /**
      * @return List<Product>
@@ -164,5 +170,23 @@ public class ProductService implements IProductService {
     @Override
     public Long countProductByNameAndBrand(String brand, String name) {
         return productRepository.countByBrandAndName(brand, name);
+    }
+
+    @Override
+    public ProductDto convertToProductDto(Product product) {
+        ProductDto productDto = modelMapper.map(product, ProductDto.class);
+        List<Image> images = imageRepository.findByProductId(product.getId());
+        List<ImageDto> imageDto = images.stream()
+                .map(image -> modelMapper.map(image, ImageDto.class))
+                .toList();
+        productDto.setImages(imageDto);
+        return productDto;
+    }
+
+    @Override
+    public List<ProductDto> convertToProductDtoList(List<Product> products) {
+        return products.stream()
+                .map(product -> modelMapper.map(product, ProductDto.class))
+                .toList();
     }
 }

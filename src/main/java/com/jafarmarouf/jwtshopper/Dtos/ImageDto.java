@@ -1,7 +1,6 @@
 package com.jafarmarouf.jwtshopper.Dtos;
 
 import lombok.Data;
-import java.sql.Blob;
 
 @Data
 public class ImageDto {
