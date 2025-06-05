@@ -8,6 +8,7 @@ import com.jafarmarouf.jwtshopper.repository.ProductRepository;
 import com.jafarmarouf.jwtshopper.requests.product.AddProductRequest;
 import com.jafarmarouf.jwtshopper.requests.product.UpdateProductRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +19,14 @@ import java.util.Optional;
 public class ProductService implements IProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+
+    /**
+     * @return List<Product>
+     */
+    @Override
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
+    }
 
     /**
      * @param id Long
@@ -73,7 +82,7 @@ public class ProductService implements IProductService {
 
     /**
      * @param existingProduct Product
-     * @param request UpdateProductRequest
+     * @param request         UpdateProductRequest
      * @return Product
      */
     private Product updateExistingProduct(Product existingProduct, UpdateProductRequest request) {
@@ -100,14 +109,6 @@ public class ProductService implements IProductService {
     }
 
     /**
-     * @return List<Product>
-     */
-    @Override
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
-    }
-
-    /**
      * @param category Category
      * @return List<Product>
      */
@@ -126,16 +127,6 @@ public class ProductService implements IProductService {
     }
 
     /**
-     * @param category Category
-     * @param brand    String
-     * @return List<Product>
-     */
-    @Override
-    public List<Product> getProductByCategoryAndBrand(String category, String brand) {
-        return productRepository.findByCategoryNameAndBrand(category, brand);
-    }
-
-    /**
      * @param name String
      * @return Product
      */
@@ -150,9 +141,20 @@ public class ProductService implements IProductService {
      * @return List<Product>
      */
     @Override
-    public List<Product> getProductByBrandAndName(String brand, String name) {
+    public List<Product> getProductByNameAndBrand(String brand, String name) {
         return productRepository.findByBrandAndName(brand, name);
     }
+
+    /**
+     * @param category Category
+     * @param brand    String
+     * @return List<Product>
+     */
+    @Override
+    public List<Product> getProductByCategoryAndBrand(String category, String brand) {
+        return productRepository.findByCategoryNameAndBrand(category, brand);
+    }
+
 
     /**
      * @param brand String
@@ -160,7 +162,7 @@ public class ProductService implements IProductService {
      * @return Long
      */
     @Override
-    public Long countProductByBrandAndName(String brand, String name) {
+    public Long countProductByNameAndBrand(String brand, String name) {
         return productRepository.countByBrandAndName(brand, name);
     }
 }

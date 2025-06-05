@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface IProductService {
 
+    List<Product> getAllProducts();
+
     Product getProductById(Long id);
 
     Product addProduct(AddProductRequest request);
@@ -16,17 +18,16 @@ public interface IProductService {
 
     void deleteProductById(Long id);
 
-    List<Product> getAllProducts();
-
     List<Product> getProductByCategoryName(String category);
 
     List<Product> getProductByBrand(String brand);
 
-    List<Product> getProductByCategoryAndBrand(String category, String brand);
-
     List<Product> getProductByName(String name);
 
-    List<Product> getProductByBrandAndName(String brand, String name);
+    List<Product> getProductByNameAndBrand(String brand, String name);
 
-    Long countProductByBrandAndName(String brand, String name);
+    List<Product> getProductByCategoryAndBrand(String category, String brand);
+
+    Long countProductByNameAndBrand(String brand, String name);
+
 }
