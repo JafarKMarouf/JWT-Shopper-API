@@ -99,6 +99,10 @@ public class ProductService implements IProductService {
         existingProduct.setDescription(request.getDescription());
 
         Category category = categoryRepository.findByName(request.getCategory().getName());
+        if (category == null) {
+            throw new ResourceNotFoundException("Category '" + request.getCategory().getName() + "' not found");
+        }
+
         existingProduct.setCategory(category);
         return existingProduct;
     }
@@ -172,6 +176,10 @@ public class ProductService implements IProductService {
         return productRepository.countByBrandAndName(brand, name);
     }
 
+    /**
+     * @param product Product
+     * @return ProductDto
+     */
     @Override
     public ProductDto convertToProductDto(Product product) {
         ProductDto productDto = modelMapper.map(product, ProductDto.class);
@@ -183,6 +191,10 @@ public class ProductService implements IProductService {
         return productDto;
     }
 
+    /**
+     * @param products List<Product>
+     * @return List<ProductDto>
+     */
     @Override
     public List<ProductDto> convertToProductDtoList(List<Product> products) {
         return products.stream()
