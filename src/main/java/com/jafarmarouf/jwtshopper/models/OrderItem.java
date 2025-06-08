@@ -2,7 +2,6 @@ package com.jafarmarouf.jwtshopper.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,26 +11,29 @@ import java.math.BigDecimal;
 @Setter
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
-@Entity(name = "cart_items")
-public class CartItem {
+@Entity(name = "orders_items")
+public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int quantity;
-    private BigDecimal unitPrice;
-    private BigDecimal totalPrice;
 
-    @ManyToOne
+    private BigDecimal price;
+    private int quantity;
+
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id")
     private Product product;
 
     @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "cart_id")
-    private Cart cart;
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
 
-    public void setTotalPrice() {
-        this.totalPrice = this.unitPrice.multiply(new BigDecimal(quantity));
+
+    public OrderItem(Product product, Order order, BigDecimal price, int quantity) {
+        this.product = product;
+        this.order = order;
+        this.price = price;
+        this.quantity = quantity;
     }
 }
