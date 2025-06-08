@@ -4,6 +4,7 @@ import com.jafarmarouf.jwtshopper.exceptions.ResourceNotFoundException;
 import com.jafarmarouf.jwtshopper.models.Cart;
 import com.jafarmarouf.jwtshopper.repository.CartItemRepository;
 import com.jafarmarouf.jwtshopper.repository.CartRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +32,7 @@ public class CartService implements ICartService {
     /**
      * @param id Long
      */
+    @Transactional
     @Override
     public void removeCart(Long id) {
         Cart cart = getCart(id);
@@ -47,5 +49,14 @@ public class CartService implements ICartService {
     public BigDecimal getTotalPrice(Long id) {
         Cart cart = getCart(id);
         return cart.getTotalAmount();
+    }
+
+    /**
+     * @return Long
+     */
+    @Override
+    public Long initializeNewCart() {
+        Cart newCart = new Cart();
+        return cartRepository.save(newCart).getId();
     }
 }

@@ -30,11 +30,7 @@ public class CartItemService implements ICartItemService {
         Cart cart = cartService.getCart(cartId);
         Product product = productService.getProductById(productId);
 
-        CartItem cartItem = cart.getItems()
-                .stream()
-                .filter(item -> item.getProduct().getId().equals(productId))
-                .findFirst()
-                .orElse(new CartItem());
+        CartItem cartItem = cart.getItems().stream().filter(item -> item.getProduct().getId().equals(productId)).findFirst().orElse(new CartItem());
         if (cartItem.getId() == null) {
             cartItem.setCart(cart);
             cartItem.setProduct(product);
@@ -73,12 +69,17 @@ public class CartItemService implements ICartItemService {
                 .stream()
                 .filter(item -> item.getProduct().getId().equals(productId))
                 .findFirst()
-                .ifPresent(item -> {
+                .ifPresentOrElse(item -> {
                     item.setQuantity(quantity);
                     item.setUnitPrice(productService.getProductById(productId).getPrice());
                     item.setTotalPrice();
+                }, () -> {
+                    throw new ResourceNotFoundException("item for this product not found");
                 });
-        BigDecimal totalAmount = cart.getTotalAmount();
+        BigDecimal totalAmount = cart.getItems()
+                .stream()
+                .map(CartItem::getTotalPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
         cart.setTotalAmount(totalAmount);
         cartRepository.save(cart);
     }
