@@ -18,8 +18,8 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 public class CartController {
     private final ICartService cartService;
 
-    @GetMapping("/{id}/my-carts")
-    public ResponseEntity<ApiResponse> getCart(@PathVariable Long id) {
+    @GetMapping("/{id}/find-cart-by-id")
+    public ResponseEntity<ApiResponse> findCartById(@PathVariable Long id) {
         try {
             Cart cart = cartService.getCart(id);
             return ResponseEntity.ok(new ApiResponse("Success", cart));
@@ -28,10 +28,19 @@ public class CartController {
         }
     }
 
+    @GetMapping("/{userId}/user-cart")
+    public ResponseEntity<ApiResponse> findCartByUserId(@PathVariable Long userId) {
+        Cart cart = cartService.getCartByUserId(userId);
+        if (cart == null) {
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Cart is not found!", null));
+        }
+        return ResponseEntity.ok(new ApiResponse("Success", cart));
+    }
+
     @DeleteMapping("/{id}/clear")
-    public ResponseEntity<ApiResponse> removeCart(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse> clearCart(@PathVariable Long id) {
         try {
-            cartService.removeCart(id);
+            cartService.clearCartById(id);
             return ResponseEntity.ok(new ApiResponse("Cart Cleared Success!", null));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));

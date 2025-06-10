@@ -34,11 +34,11 @@ public class CartService implements ICartService {
      */
     @Transactional
     @Override
-    public void removeCart(Long id) {
+    public void clearCartById(Long id) {
         Cart cart = getCart(id);
         cartItemRepository.deleteAllByCartId(id);
         cart.getItems().clear();
-        cartRepository.deleteById(id);
+        cart.setTotalAmount(BigDecimal.ZERO);
     }
 
     /**
@@ -49,6 +49,15 @@ public class CartService implements ICartService {
     public BigDecimal getTotalPrice(Long id) {
         Cart cart = getCart(id);
         return cart.getTotalAmount();
+    }
+
+    /**
+     * @param userId Long
+     * @return Cart
+     */
+    @Override
+    public Cart getCartByUserId(Long userId) {
+        return cartRepository.findCartByUserId(userId);
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.jafarmarouf.jwtshopper.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jafarmarouf.jwtshopper.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -32,6 +33,7 @@ public class Order {
     private Set<OrderItem> orderItems = new HashSet<>();
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;
 }

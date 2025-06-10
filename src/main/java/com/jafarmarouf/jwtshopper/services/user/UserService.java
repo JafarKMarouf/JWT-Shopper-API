@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -50,7 +51,10 @@ public class UserService implements IUserService {
                     user.setEmail(request.getEmail());
                     user.setPassword(request.getPassword());
                     user.setCreatedAt(LocalDateTime.now());
-                    user.setCart(new Cart());
+                    Cart cart = new Cart();
+                    cart.setUser(user);
+                    cart.setTotalAmount(BigDecimal.ZERO);
+                    user.setCart(cart);
                     return userRepository.save(user);
                 }).orElseThrow(() -> new AlreadyExistsException("Oops!," + request.getEmail() + " already exists!"));
     }
