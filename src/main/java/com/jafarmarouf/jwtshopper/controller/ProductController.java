@@ -1,6 +1,7 @@
 package com.jafarmarouf.jwtshopper.controller;
 
-import com.jafarmarouf.jwtshopper.Dtos.ProductDto;
+import com.jafarmarouf.jwtshopper.dtos.ProductDto;
+import com.jafarmarouf.jwtshopper.exceptions.AlreadyExistsException;
 import com.jafarmarouf.jwtshopper.exceptions.ResourceNotFoundException;
 import com.jafarmarouf.jwtshopper.models.Product;
 import com.jafarmarouf.jwtshopper.requests.product.AddProductRequest;
@@ -11,8 +12,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @AllArgsConstructor
@@ -44,8 +45,8 @@ public class ProductController {
             Product theProduct = productService.addProduct(product);
             ProductDto convertedProduct = productService.convertToProductDto(theProduct);
             return ResponseEntity.ok(new ApiResponse("Add Product success", convertedProduct));
-        } catch (Exception e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+        } catch (AlreadyExistsException e) {
+            return ResponseEntity.status(CONFLICT).body(new ApiResponse(e.getMessage(), null));
         }
     }
 

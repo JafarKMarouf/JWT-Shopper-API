@@ -1,5 +1,6 @@
 package com.jafarmarouf.jwtshopper.services.cart;
 
+import com.jafarmarouf.jwtshopper.dtos.CartItemDto;
 import com.jafarmarouf.jwtshopper.exceptions.ResourceNotFoundException;
 import com.jafarmarouf.jwtshopper.models.Cart;
 import com.jafarmarouf.jwtshopper.models.CartItem;
@@ -8,6 +9,7 @@ import com.jafarmarouf.jwtshopper.repository.CartItemRepository;
 import com.jafarmarouf.jwtshopper.repository.CartRepository;
 import com.jafarmarouf.jwtshopper.services.product.IProductService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -19,18 +21,23 @@ public class CartItemService implements ICartItemService {
     private final ICartService cartService;
     private final IProductService productService;
     private final CartRepository cartRepository;
+    private final ModelMapper modelMapper;
 
     /**
      * @param productId Long
      * @param cartId    Long
      * @param quantity  int
+     * @return CartItem
      */
     @Override
-    public void addItemToCart(Long productId, Long cartId, int quantity) {
+    public CartItem addItemToCart(Long productId, Long cartId, int quantity) {
         Cart cart = cartService.getCart(cartId);
         Product product = productService.getProductById(productId);
-
-        CartItem cartItem = cart.getItems().stream().filter(item -> item.getProduct().getId().equals(productId)).findFirst().orElse(new CartItem());
+        CartItem cartItem = cart.getItems()
+                .stream()
+                .filter(item -> item.getProduct().getId().equals(productId))
+                .findFirst()
+                .orElse(new CartItem());
         if (cartItem.getId() == null) {
             cartItem.setCart(cart);
             cartItem.setProduct(product);
@@ -41,8 +48,9 @@ public class CartItemService implements ICartItemService {
         }
         cartItem.setTotalPrice();
         cart.addItem(cartItem);
-        cartItemRepository.save(cartItem);
+        CartItem item = cartItemRepository.save(cartItem);
         cartRepository.save(cart);
+        return item;
     }
 
     /**
@@ -52,7 +60,7 @@ public class CartItemService implements ICartItemService {
     @Override
     public void removeItemFromCart(Long productId, Long cartId) {
         Cart cart = cartService.getCart(cartId);
-        CartItem cartItem = getCartItem(productId, cartId);
+        CartItem cartItem = getCartItem(cartId, productId);
         cart.removeItem(cartItem);
         cartRepository.save(cart);
     }
@@ -85,17 +93,26 @@ public class CartItemService implements ICartItemService {
     }
 
     /**
-     * @param productId Long
      * @param cartId    Long
+     * @param productId Long
      * @return CartItem
      */
     @Override
-    public CartItem getCartItem(Long productId, Long cartId) {
+    public CartItem getCartItem(Long cartId, Long productId) {
         Cart cart = cartService.getCart(cartId);
         return cart.getItems()
                 .stream()
                 .filter(item -> item.getProduct().getId().equals(productId))
                 .findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException("Item not found"));
+    }
+
+    /**
+     * @param cartItem CartItem
+     * @return CartItemDto
+     */
+    @Override
+    public CartItemDto convertToCartItemDto(CartItem cartItem) {
+        return modelMapper.map(cartItem, CartItemDto.class);
     }
 }

@@ -1,9 +1,14 @@
 package com.jafarmarouf.jwtshopper.controller;
 
+import com.jafarmarouf.jwtshopper.dtos.CartItemDto;
 import com.jafarmarouf.jwtshopper.exceptions.ResourceNotFoundException;
+import com.jafarmarouf.jwtshopper.models.Cart;
+import com.jafarmarouf.jwtshopper.models.CartItem;
+import com.jafarmarouf.jwtshopper.models.User;
 import com.jafarmarouf.jwtshopper.response.ApiResponse;
 import com.jafarmarouf.jwtshopper.services.cart.ICartItemService;
 import com.jafarmarouf.jwtshopper.services.cart.ICartService;
+import com.jafarmarouf.jwtshopper.services.user.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,17 +21,29 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 public class CartItemController {
     private final ICartItemService cartItemService;
     private final ICartService cartService;
+    private final IUserService userService;
 
-    @PostMapping("/item/add")
-    public ResponseEntity<ApiResponse> addItemToCart(@RequestParam(required = false) Long cartId,
-                                                     @RequestParam Long itemId,
+    @GetMapping("/cart/{cartId}/item/{itemId}/find")
+    public ResponseEntity<ApiResponse> getCartItem(@PathVariable Long cartId, @PathVariable Long itemId) {
+        try {
+            CartItem cartItem = cartItemService.getCartItem(cartId, itemId);
+            CartItemDto cartItemDto = cartItemService.convertToCartItemDto(cartItem);
+            return ResponseEntity.ok(new ApiResponse("Success", cartItemDto));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<ApiResponse> addItemToCart(@RequestParam Long itemId,
                                                      @RequestParam Integer quantity) {
         try {
-            if (cartId == null) {
-                cartId = cartService.initializeNewCart();
-            }
-            cartItemService.addItemToCart(itemId, cartId, quantity);
-            return ResponseEntity.ok(new ApiResponse("add item to cart success", null));
+            User user = userService.getUserById(1L);
+            Cart cart = cartService.initializeNewCart(user);
+
+            CartItem cartItem = cartItemService.addItemToCart(itemId, cart.getId(), quantity);
+            CartItemDto cartItemDto = cartItemService.convertToCartItemDto(cartItem);
+            return ResponseEntity.ok(new ApiResponse("add item to cart success", cartItemDto));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }

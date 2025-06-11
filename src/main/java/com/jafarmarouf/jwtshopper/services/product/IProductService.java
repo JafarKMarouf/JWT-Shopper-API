@@ -1,6 +1,6 @@
 package com.jafarmarouf.jwtshopper.services.product;
 
-import com.jafarmarouf.jwtshopper.Dtos.ProductDto;
+import com.jafarmarouf.jwtshopper.dtos.ProductDto;
 import com.jafarmarouf.jwtshopper.models.Product;
 import com.jafarmarouf.jwtshopper.requests.product.AddProductRequest;
 import com.jafarmarouf.jwtshopper.requests.product.UpdateProductRequest;

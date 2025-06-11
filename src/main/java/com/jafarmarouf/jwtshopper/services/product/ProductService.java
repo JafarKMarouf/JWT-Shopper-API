@@ -1,7 +1,8 @@
 package com.jafarmarouf.jwtshopper.services.product;
 
-import com.jafarmarouf.jwtshopper.Dtos.ImageDto;
-import com.jafarmarouf.jwtshopper.Dtos.ProductDto;
+import com.jafarmarouf.jwtshopper.dtos.ImageDto;
+import com.jafarmarouf.jwtshopper.dtos.ProductDto;
+import com.jafarmarouf.jwtshopper.exceptions.AlreadyExistsException;
 import com.jafarmarouf.jwtshopper.exceptions.ResourceNotFoundException;
 import com.jafarmarouf.jwtshopper.models.Category;
 import com.jafarmarouf.jwtshopper.models.Image;
@@ -49,6 +50,10 @@ public class ProductService implements IProductService {
      */
     @Override
     public Product addProduct(AddProductRequest request) {
+        if (productExistsByNameAndBrand(request.getName(), request.getBrand())) {
+            throw new AlreadyExistsException(request.getName() + " " + request.getBrand() + " already exists!, you can update product");
+        }
+
         Category category = Optional.ofNullable(categoryRepository.findByName(request.getCategory().getName()))
                 .orElseGet(() -> {
                     Category newCategory = new Category(request.getCategory().getName());
@@ -56,6 +61,10 @@ public class ProductService implements IProductService {
                 });
         request.setCategory(category);
         return productRepository.save(createProduct(request, category));
+    }
+
+    private boolean productExistsByNameAndBrand(String name, String brand) {
+        return productRepository.existsByNameAndBrand(name, brand);
     }
 
     /**

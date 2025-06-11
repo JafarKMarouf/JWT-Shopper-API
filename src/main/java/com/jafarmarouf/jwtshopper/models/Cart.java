@@ -1,6 +1,5 @@
 package com.jafarmarouf.jwtshopper.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,13 +26,8 @@ public class Cart {
     private Set<CartItem> items = new HashSet<>();
 
     @OneToOne
-    @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;
-
-    public Cart(User user) {
-        this.user = user;
-    }
 
     public void addItem(CartItem item) {
         this.items.add(item);

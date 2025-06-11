@@ -1,6 +1,6 @@
 package com.jafarmarouf.jwtshopper.controller;
 
-import com.jafarmarouf.jwtshopper.Dtos.UserDto;
+import com.jafarmarouf.jwtshopper.dtos.UserDto;
 import com.jafarmarouf.jwtshopper.exceptions.AlreadyExistsException;
 import com.jafarmarouf.jwtshopper.exceptions.ResourceNotFoundException;
 import com.jafarmarouf.jwtshopper.models.User;

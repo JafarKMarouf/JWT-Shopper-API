@@ -1,6 +1,6 @@
 package com.jafarmarouf.jwtshopper.services.user;
 
-import com.jafarmarouf.jwtshopper.Dtos.UserDto;
+import com.jafarmarouf.jwtshopper.dtos.UserDto;
 import com.jafarmarouf.jwtshopper.models.User;
 import com.jafarmarouf.jwtshopper.requests.user.CreateUserRequest;
 import com.jafarmarouf.jwtshopper.requests.user.UpdateUserRequest;

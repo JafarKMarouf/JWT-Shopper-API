@@ -1,4 +1,4 @@
-package com.jafarmarouf.jwtshopper.Dtos;
+package com.jafarmarouf.jwtshopper.dtos;
 
 import lombok.Data;
 

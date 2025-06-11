@@ -1,6 +1,6 @@
 package com.jafarmarouf.jwtshopper.services.image;
 
-import com.jafarmarouf.jwtshopper.Dtos.ImageDto;
+import com.jafarmarouf.jwtshopper.dtos.ImageDto;
 import com.jafarmarouf.jwtshopper.exceptions.ResourceNotFoundException;
 import com.jafarmarouf.jwtshopper.models.Image;
 import com.jafarmarouf.jwtshopper.models.Product;

@@ -30,7 +30,6 @@ public class OrderItem {
     @JoinColumn(name = "order_id")
     private Order order;
 
-
     public OrderItem(Product product, Order order, BigDecimal price, int quantity) {
         this.product = product;
         this.order = order;

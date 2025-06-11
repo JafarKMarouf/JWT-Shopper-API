@@ -1,4 +1,4 @@
-package com.jafarmarouf.jwtshopper.Dtos;
+package com.jafarmarouf.jwtshopper.dtos;
 
 import com.jafarmarouf.jwtshopper.models.Category;
 import lombok.Data;
@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 public class ProductDto {
-    private Long id;
+    private Long productId;
     private String name;
     private String brand;
     private BigDecimal price;

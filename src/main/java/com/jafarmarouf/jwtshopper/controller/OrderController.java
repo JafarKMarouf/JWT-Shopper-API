@@ -1,5 +1,6 @@
 package com.jafarmarouf.jwtshopper.controller;
 
+import com.jafarmarouf.jwtshopper.dtos.OrderDto;
 import com.jafarmarouf.jwtshopper.exceptions.ResourceNotFoundException;
 import com.jafarmarouf.jwtshopper.models.Order;
 import com.jafarmarouf.jwtshopper.response.ApiResponse;
@@ -23,8 +24,9 @@ public class OrderController {
     public ResponseEntity<ApiResponse> createOrder(@RequestParam Long userId) {
         try {
             Order order = orderService.placeOrder(userId);
-            return ResponseEntity.ok(new ApiResponse("Success", order));
-        } catch (Exception e) {
+            OrderDto orderDto = orderService.convertOrdersToDto(order);
+            return ResponseEntity.ok(new ApiResponse("Success", orderDto));
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
         }
     }
@@ -32,7 +34,7 @@ public class OrderController {
     @GetMapping("/{orderId}/order")
     public ResponseEntity<ApiResponse> getOrderById(@PathVariable Long orderId) {
         try {
-            Order order = orderService.getOrderById(orderId);
+            OrderDto order = orderService.getOrderById(orderId);
             return ResponseEntity.ok(new ApiResponse("Success", order));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
@@ -41,10 +43,11 @@ public class OrderController {
 
     @GetMapping("/user-orders")
     public ResponseEntity<ApiResponse> getUserOrders(@RequestParam Long userId) {
-        List<Order> ordersList = orderService.getUserOrders(userId);
-        if (ordersList.isEmpty()) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("You don't have any orders yet!", null));
+        try {
+            List<OrderDto> ordersList = orderService.getUserOrders(userId);
+            return ResponseEntity.ok(new ApiResponse("Success", ordersList));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
-        return ResponseEntity.ok(new ApiResponse("Success", ordersList));
     }
 }

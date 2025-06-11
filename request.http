@@ -1,0 +1,67 @@
+### GET request to find user by id
+GET http://localhost:8080/api/v1/users/1/user
+
+### POST request to create new user
+POST http://localhost:8080/api/v1/users/create-user
+Content-Type: application/json
+
+{
+  "firstName": "Doe",
+  "lastName": "John",
+  "email": "doe.john@example.com",
+  "password": "123456"
+}
+
+### PUT request to update exists user
+PUT http://localhost:8080/api/v1/users/6/update
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Doe"
+}
+
+### DELETE request to delete exists user
+DELETE http://localhost:8080/api/v1/users/6/delete
+
+
+### GET request to get all products
+GET http://localhost:8080/api/v1/products/all-products
+
+### POST request to add new product
+POST http://localhost:8080/api/v1/products/add
+Content-Type: application/json
+
+{
+  "name": "Portable Phone Charger",
+  "brand": "ChargeGo",
+  "price": 200,
+  "category": "Mobile Accessories",
+  "inventory": 15,
+  "description": "10,000mAh power bank with fast charging support and dual USB output."
+}
+
+### GET request to get user cart
+GET http://localhost:8080/api/v1/carts/user-cart?userId=1
+Content-Type: application/json
+
+### GET request to get cart by id
+GET http://localhost:8080/api/v1/carts/1/cart
+
+#### POST request to add items to cart
+POST http://localhost:8080/api/v1/cart-item/add?itemId=3&quantity=2
+
+### GET request to get cart item
+GET http://localhost:8080/api/v1/cart-item/cart/1/item/1/find
+
+### DELETE request to remove item from cart
+DELETE http://localhost:8080/api/v1/cart-item/cart/1/item/2/remove
+
+### DELETE request to clear cart
+DELETE http://localhost:8080/api/v1/carts/1/clear
+
+### POST request to place order
+POST http://localhost:8080/api/v1/orders/order/place-order?userId=1
+
+### GET request to get user orders
+GET http://localhost:8080/api/v1/orders/user-orders?userId=1

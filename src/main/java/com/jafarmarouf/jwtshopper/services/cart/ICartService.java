@@ -1,6 +1,8 @@
 package com.jafarmarouf.jwtshopper.services.cart;
 
+import com.jafarmarouf.jwtshopper.dtos.CartDto;
 import com.jafarmarouf.jwtshopper.models.Cart;
+import com.jafarmarouf.jwtshopper.models.User;
 
 import java.math.BigDecimal;
 
@@ -13,5 +15,7 @@ public interface ICartService {
 
     Cart getCartByUserId(Long userId);
 
-    Long initializeNewCart();
+    Cart initializeNewCart(User user);
+
+    CartDto convertToCartDto(Cart cart);
 }
