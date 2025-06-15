@@ -1,4 +1,4 @@
-package com.jafarmarouf.jwtshopper.config;
+package com.jafarmarouf.jwtshopper.security.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
