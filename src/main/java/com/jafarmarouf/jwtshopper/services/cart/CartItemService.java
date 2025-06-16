@@ -90,6 +90,7 @@ public class CartItemService implements ICartItemService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         cart.setTotalAmount(totalAmount);
         cartRepository.save(cart);
+
     }
 
     /**

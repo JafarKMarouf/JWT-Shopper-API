@@ -9,15 +9,17 @@ import com.jafarmarouf.jwtshopper.response.ApiResponse;
 import com.jafarmarouf.jwtshopper.services.cart.ICartItemService;
 import com.jafarmarouf.jwtshopper.services.cart.ICartService;
 import com.jafarmarouf.jwtshopper.services.user.IUserService;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("${api.prefix}/cart-item")
+@RequestMapping("${api.prefix}/cart-items")
 public class CartItemController {
     private final ICartItemService cartItemService;
     private final ICartService cartService;
@@ -38,7 +40,7 @@ public class CartItemController {
     public ResponseEntity<ApiResponse> addItemToCart(@RequestParam Long itemId,
                                                      @RequestParam Integer quantity) {
         try {
-            User user = userService.getUserById(1L);
+            User user = userService.getAuthenticatedUser();
             Cart cart = cartService.initializeNewCart(user);
 
             CartItem cartItem = cartItemService.addItemToCart(itemId, cart.getId(), quantity);
@@ -46,6 +48,8 @@ public class CartItemController {
             return ResponseEntity.ok(new ApiResponse("add item to cart success", cartItemDto));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        } catch (JwtException e) {
+            return ResponseEntity.status(UNAUTHORIZED).body(new ApiResponse(e.getMessage(), null));
         }
     }
 

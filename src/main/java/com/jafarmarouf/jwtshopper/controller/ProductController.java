@@ -10,6 +10,7 @@ import com.jafarmarouf.jwtshopper.response.ApiResponse;
 import com.jafarmarouf.jwtshopper.services.product.IProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -40,6 +41,7 @@ public class ProductController {
     }
 
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ApiResponse> storeProduct(@RequestBody AddProductRequest product) {
         try {
             Product theProduct = productService.addProduct(product);
@@ -51,6 +53,7 @@ public class ProductController {
     }
 
     @PutMapping("/product/{productId}/update")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ApiResponse> updateProduct(@PathVariable Long productId, @RequestBody UpdateProductRequest product) {
         try {
             Product theProduct = productService.updateProduct(product, productId);
@@ -62,6 +65,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/product/{productId}/delete")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ApiResponse> deleteProduct(@PathVariable Long productId) {
         try {
             productService.deleteProductById(productId);

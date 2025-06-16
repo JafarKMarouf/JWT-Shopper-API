@@ -1,5 +1,5 @@
 ### GET request to find user by id
-GET http://localhost:8080/api/v1/users/1/user
+GET http://localhost:8080/api/v1/users/6/user
 
 ### POST request to create new user
 POST http://localhost:8080/api/v1/users/create-user
@@ -65,3 +65,12 @@ POST http://localhost:8080/api/v1/orders/order/place-order?userId=1
 
 ### GET request to get user orders
 GET http://localhost:8080/api/v1/orders/user-orders?userId=1
+
+### POST request to login user
+POST http://localhost:8080/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "customer1@gmail.com",
+  "password": "123456"
+}

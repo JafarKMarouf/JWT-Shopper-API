@@ -6,7 +6,6 @@ import com.jafarmarouf.jwtshopper.models.Cart;
 import com.jafarmarouf.jwtshopper.models.User;
 import com.jafarmarouf.jwtshopper.repository.CartItemRepository;
 import com.jafarmarouf.jwtshopper.repository.CartRepository;
-import com.jafarmarouf.jwtshopper.services.user.IUserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -21,7 +20,6 @@ public class CartService implements ICartService {
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
     private final ModelMapper modelMapper;
-    private final IUserService userService;
 
     /**
      * @param id Long

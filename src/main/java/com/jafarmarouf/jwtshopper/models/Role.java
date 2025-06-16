@@ -1,5 +1,6 @@
 package com.jafarmarouf.jwtshopper.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,6 +23,7 @@ public class Role {
     private String name;
 
     @ManyToMany(mappedBy = "roles")
+    @JsonIgnore
     private Collection<User> user = new HashSet<>();
 
     public Role(String name) {
